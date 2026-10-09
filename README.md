@@ -13,17 +13,17 @@
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 - [Project Overview](#project-overview)
 - [Simulation Lifecycle](#simulation-lifecycle)
 - [Concurrency & Synchronization](#concurrency--synchronization)
 - [How to Run Project](#how-to-run-project)
 - [Examples](#examples)
-- [Author](#author)
+- [AI usage](#ai-usage)
 
 ---
 
-## 📖 Project Overview
+##  Project Overview
 
 In **Codexion**, $N$ Coders sit at a circular table with $N$ shared Dongles placed between them. To compile their project, each Coder must simultaneously acquire **two adjacent dongles** (left and right). 
 
@@ -35,7 +35,7 @@ In **Codexion**, $N$ Coders sit at a circular table with $N$ shared Dongles plac
 
 ---
 
-## 🔄 Simulation Lifecycle
+##  Simulation Lifecycle
 
 Each Coder runs inside a separate POSIX thread and transitions through the following states:
 
@@ -62,7 +62,7 @@ Each Coder runs inside a separate POSIX thread and transitions through the follo
 
 ---
 
-## 🛡️ Concurrency & Synchronization
+## Concurrency & Synchronization
 
 ### Deadlock Prevention (Resource Hierarchy)
 Every coder compares the IDs of their left and right dongles and **always acquires the dongle with the smaller ID first**:
@@ -81,7 +81,7 @@ else
 
 ---
 
-## 🛠️ How to Run Project
+##  How to Run Project
 
 ### Compilation
 ```bash
@@ -116,4 +116,16 @@ make re     # Clean rebuild
 ```
 
 ---
+
+
+## AI usage
+
+AI was utilized strictly as an educational and code-review assistant for:
+- "Concept Deep-Dives: POSIX condition variable mechanics, spurious wakeups, and Coffman's conditions."
+- "Concurrency Verification: Validating thread interaction patterns against race conditions."
+
+
+
+
+
 
