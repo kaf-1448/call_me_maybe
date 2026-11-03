@@ -1,0 +1,33 @@
+[project]
+name = "call-me-maybe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Youssef Kaf", email = "youssefkaf1448@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "llm-sdk",
+    "mypy>=2.4.0",
+    "numpy>=2.4.6",
+    "pydantic>=2.14.1",
+]
+
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "llm_sdk",
+]
+
+[tool.uv.sources]
+llm-sdk = { workspace = true }
+
+
+[dependency-groups]
+dev = [
+    "flake8>=7.4.1",
+]
