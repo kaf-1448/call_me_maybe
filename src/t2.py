@@ -1,5 +1,3 @@
-"""Main module for constrained decoding function calling."""
-
 import argparse
 import json
 import os
@@ -134,10 +132,9 @@ def extract_number(
         valid_ids = []
         for tid in digit_ids:
             tok_str = model.decode([tid])
-            # السماح بعلامة '-' فقط في بداية الرقم وقبل كتبان أي أرقام
             if "-" in tok_str and len(value.strip()) > 0:
                 continue
-            # السماح بنقطة عشرية واحدة وفقط بعد كتابة رقم واحد على الأقل
+
             if "." in tok_str and ("." in value or not
                                    any(c.isdigit() for c in value)):
                 continue
@@ -145,7 +142,6 @@ def extract_number(
 
         value_id = max(valid_ids, key=lambda x: logits[x])
 
-        # التوقف عند المسافة أو السطر الجديد بعد توليد رقم واحد على الأقل
         if value_id in stop_ids and any(c.isdigit() for c in value):
             break
 
@@ -158,7 +154,6 @@ def extract_number(
             break
 
     try:
-        # تنظيف أي مسافات زائدة وتحويل الرقم لـ float
         return float(value.strip().replace(" ", ""))
     except ValueError:
         return 0.0
@@ -257,7 +252,7 @@ def main() -> None:
                     'Parameter \'regex\': "[aeiouAEIOU]"\n\n'
                     'Query: "Replace all vowels in \'Hello\' with asterisks"\n'
                     "Extracted: {'source_string': 'Hello', 'regex': '[aeiouAEIOU]'}\n"
-                    'Parameter \'replacement\': "*"\n\n'
+                    'Parameter \'replacement\': "*" not " *"\n\n'
                     'Query: "Replace \'cat\' with \'dog\' in \'the cat\'"\n'
                     "Extracted: {'source_string': 'the cat'}\n"
                     'Parameter \'regex\': "cat"\n\n'
