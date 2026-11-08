@@ -1,3 +1,4 @@
+from src.main import main
 import argparse
 import json
 import os
@@ -30,17 +31,23 @@ def load_json_file(path_file: str, model: Type[T]) -> List[T] | None:
         with open(path_file, "r", encoding="utf-8") as f:
             data = json.load(f)
             if not isinstance(data, list):
-                print(f"Error: Expected a JSON list in {path_file}")
+                print(
+                    f"Error: Expected a JSON list in {path_file}",
+                    file=sys.stderr
+                )
                 return None
             return [model(**item) for item in data]
     except ValidationError as e:
-        print(f"Validation Error in {path_file}: {e.errors()[0]['msg']}")
+        print(
+            f"Validation Error in {path_file}: {e.errors()[0]['msg']}",
+            file=sys.stderr
+        )
     except FileNotFoundError:
-        print(f"File not found: {path_file}")
+        print(f"File not found: {path_file}", file=sys.stderr)
     except json.JSONDecodeError as e:
-        print(f"Invalid JSON in {path_file}: {e.msg}")
+        print(f"Invalid JSON in {path_file}: {e.msg}", file=sys.stderr)
     except OSError as e:
-        print(f"OS Error reading {path_file}: {e}")
+        print(f"OS Error reading {path_file}: {e}", file=sys.stderr)
     return None
 
 
@@ -79,7 +86,8 @@ def select_function(
     full_prompt: str,
     base_f_ids: Dict[str, List[int]],
 ) -> str:
-    """Select the target function name using token-by-token constrained decoding.
+    """Select the target function name using token-by-token
+    constrained decoding.
 
     Args:
         model: The Small_LLM_Model instance.
@@ -125,7 +133,7 @@ def extract_number(
     stop_ids: set[int],
 ) -> float:
     """Extract a valid float parameter (positive or negative)
-     using constrained decoding."""
+    using constrained decoding."""
     value = ""
     while True:
         logits = model.get_logits_from_input_ids(convert_par)
@@ -173,7 +181,6 @@ def main() -> None:
 
     l_model = Small_LLM_Model()
 
-    # Load vocabulary file as recommended in section V.3.3
     vocab_path = l_model.get_path_to_vocab_file()
     try:
         with open(vocab_path, "r", encoding="utf-8") as vf:
@@ -250,7 +257,8 @@ def main() -> None:
                     "Extracted: {'source_string': 'Hello'}\n"
                     'Parameter \'regex\': "[aeiouAEIOU]"\n\n'
                     'Query: "Replace all vowels in \'Hello\' with asterisks"\n'
-                    "Extracted: {'source_string': 'Hello', 'regex': '[aeiouAEIOU]'}\n"
+                    "Extracted: {'source_string': 'Hello', 'regex': "
+                    "'[aeiouAEIOU]'}\n"
                     'Parameter \'replacement\': "*" not " *"\n\n'
                     'Query: "Replace \'cat\' with \'dog\' in \'the cat\'"\n'
                     "Extracted: {'source_string': 'the cat'}\n"
@@ -292,9 +300,8 @@ def main() -> None:
             os.makedirs(output_dir, exist_ok=True)
         with open(args.output, "w", encoding="utf-8") as f:
             json.dump(call_results, f, indent=2)
-        print(f"Saved all results to {args.output}!")
     except OSError as e:
-        print(f"Error writing output file: {e}")
+        print(f"Error writing output file: {e}", file=sys.stderr)
         sys.exit(1)
 
 

@@ -8,6 +8,9 @@
       },
       "b": {
         "type": "number"
+      },
+      "c": {
+        "type": "number"
       }
     },
     "returns": {

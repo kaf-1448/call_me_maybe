@@ -1,10 +1,11 @@
 [
   {
-    "prompt": "What is the sum of 2 and 3?",
+    "prompt": "What is the sum of 2 and 4 and 99",
     "name": "fn_add_numbers",
     "parameters": {
       "a": 2.0,
-      "b": 3.0
+      "b": 4.0,
+      "c": 99.0
     }
   },
   {
@@ -12,7 +13,8 @@
     "name": "fn_add_numbers",
     "parameters": {
       "a": 265.0,
-      "b": 345.0
+      "b": 345.0,
+      "c": 265.0
     }
   },
   {
