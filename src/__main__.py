@@ -182,24 +182,26 @@ def main() -> None:
 
     vocab_path = l_model.get_path_to_vocab_file()
     try:
-        with open(vocab_path, "r", encoding="utf-8") as vf:
-            _ = json.load(vf)
-    except OSError:
-        pass
+        with open(vocab_path, "r", encoding="utf-8") as pv:
+            vocab = json.load(pv)
+    except OSError as e:
+        print(f"Error loading vocab file: {e}", file=sys.stderr)
+        sys.exit(1)
 
-    digit_strs = [
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-        " 0", " 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9",
-        ".", "-", " -", " ", "\n",
-        "-1", "-2", "-3", "-5", "-2.5", "-3.5", "-10",
-        " -1", " -2", " -3", " -2.5", " -3.5"
-    ]
-    conv_all_par = list({l_model.encode(d)[0].tolist()[0] for d in digit_strs})
+    valid_chars = set("0123456789.-")
+    digit_vocab = {}
+    for token, token_id in vocab.items():
+        clean_tok = token.replace(" ", "")
+        if clean_tok in valid_chars and len(clean_tok) == 1:
+            digit_vocab[token] = token_id
+
+    digit_str_ids = list(digit_vocab.values())
+
     stop_num_ids = {
         l_model.encode(" ")[0].tolist()[0],
         l_model.encode("\n")[0].tolist()[0],
-        220,
     }
+
     bool_true_id = l_model.encode("true")[0].tolist()[0]
     bool_false_id = l_model.encode("false")[0].tolist()[0]
 
@@ -231,7 +233,7 @@ def main() -> None:
                 )
                 convert_par = l_model.encode(prompt_par)[0].tolist()
                 extracted_parameters[para_name] = extract_number(
-                    l_model, convert_par, conv_all_par, stop_num_ids
+                    l_model, convert_par, digit_str_ids, stop_num_ids
                 )
 
             elif para_info.type == "boolean":
